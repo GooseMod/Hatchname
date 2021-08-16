@@ -9,18 +9,15 @@ import strformat
 const updatesUrl = "https://updates.goosemod.com"
 const modules = {"1": "betterdiscord", "2": "smartcord", "3": "goosemod", "4": "reactdevtools"}.toTable
 
-var fileName: string
+let fileName = os.extractFilename(os.getAppFilename()).split(".exe")[0]
 var baseDirectory: string
 
 when system.hostOS == "windows":
     baseDirectory = os.getEnv("appdata")
-    fileName = os.extractFilename(os.getAppFilename()).split(".exe")[0]
 elif system.hostOS == "macosx":
-    baseDirectory = os.joinPath(os.getHomeDir(), "Library/Application Support")
-    fileName = os.extractFilename(os.getAppFilename())
+    baseDirectory = os.joinPath(os.getHomeDir(), "Library", "Application Support")
 else:
     baseDirectory = os.joinPath(os.getHomeDir(), ".config")
-    fileName = os.extractFilename(os.getAppFilename())
 
 # Function for formatting Discord paths
 proc getChannelPath(channel: string): string =
