@@ -53,8 +53,10 @@ else: # Generate endpoint from modules encoded in filename
 let settingsPath = os.joinPath(getChannelPath(selectedChannel), "settings.json")
 if fileExists(settingsPath):
     let settings = parseFile(settingsPath)
-    settings.add("NEW_UPDATE_ENDPOINT", %fmt"{updatesHost}/{updatesEndpoint}/")
+
     settings.add("UPDATE_ENDPOINT", %fmt"{updateshost}/{updatesEndpoint}")
+    settings.add("NEW_UPDATE_ENDPOINT", %fmt"{updatesHost}/{updatesEndpoint}/")
+
     writeFile(settingsPath, settings.pretty())
 else:
     # todo: Error out (no settings.json)
