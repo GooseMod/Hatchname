@@ -8,7 +8,7 @@ import strformat
 
 const updatesHost = "https://updates.goosemod.com"
 
-# IDs for modules encoded via filename, eg: GMStable_134 = betterdiscord+goosemod+reactdevtools
+# IDs for modules encoded via filename (eg: GMStable_134 = betterdiscord+goosemod+reactdevtools)
 const moduleIds = {"1": "betterdiscord", "2": "smartcord", "3": "goosemod", "4": "reactdevtools"}.toTable
 
 
@@ -41,15 +41,20 @@ let selectedChannel = noUnderscore[0].toLower()
 
 var updatesEndpoint: string
 
+# todo: Sanity check filename, if not error out
+
+# Default endpoint to GM if no options are provided (eg: GMStable)
 if noUnderscore.len == 1:
     updatesEndpoint = "goosemod"
-else:
+else: # Generate endpoint from modules encoded in filename
     updatesEndpoint = (block: collect(newSeq): (for i in deduplicate(mapIt(noUnderscore[1], $it)): moduleIds[i])).join("+")
 
-
+# Get settings path via 
 let settingsPath = os.joinPath(getChannelPath(selectedChannel), "settings.json")
 if fileExists(settingsPath):
     let settings = parseFile(settingsPath)
     settings.add("NEW_UPDATE_ENDPOINT", %fmt"{updatesHost}/{updatesEndpoint}/")
     settings.add("UPDATE_ENDPOINT", %fmt"{updateshost}/{updatesEndpoint}")
     writeFile(settingsPath, settings.pretty())
+else:
+    # todo: Error out (no settings.json)
