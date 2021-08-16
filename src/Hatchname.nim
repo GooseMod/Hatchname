@@ -28,14 +28,14 @@ proc getChannelPath(channel: string): string =
     var channelPath = os.joinPath(baseDirectory, "discord")
 
     # Discord stable doesn't have a suffix so it's ignored
-    if channel != "Stable":
-        channelPath = channelPath & channel.toLower()
+    if channel != "stable":
+        channelPath = channelPath & channel
     
     return channelPath
 
 let gmRemoved = fileName.split("GM")[1]
 let noUnderscore = gmRemoved.split("_")
-let selectedChannel = noUnderscore[0]
+let selectedChannel = noUnderscore[0].toLower()
 
 var moduleString: string
 
