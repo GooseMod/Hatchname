@@ -1,0 +1,5 @@
+# Don't push custom dumb CC fixes
+*.sh
+
+# Don't push binaries
+dist
