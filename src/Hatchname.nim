@@ -7,17 +7,21 @@ import sugar
 import strformat
 
 const updatesHost = "https://updates.goosemod.com"
+
+# IDs for modules encoded via filename, eg: GMStable_134 = betterdiscord+goosemod+reactdevtools
 const moduleIds = {"1": "betterdiscord", "2": "smartcord", "3": "goosemod", "4": "reactdevtools"}.toTable
+
 
 let fileName = os.extractFilename(os.getAppFilename()).split(".exe")[0]
 var baseDirectory: string
 
-when system.hostOS == "windows":
+when system.hostOS == "windows": # Use when to have this at compile time
     baseDirectory = os.getEnv("appdata")
 elif system.hostOS == "macosx":
     baseDirectory = os.joinPath(os.getHomeDir(), "Library", "Application Support")
 else:
     baseDirectory = os.joinPath(os.getHomeDir(), ".config")
+
 
 # Function for formatting Discord paths
 proc getChannelPath(channel: string): string =
@@ -30,6 +34,7 @@ proc getChannelPath(channel: string): string =
     
     return channelPath
 
+
 let gmRemoved = fileName.split("GM")[1]
 let noUnderscore = gmRemoved.split("_")
 let selectedChannel = noUnderscore[0].toLower()
@@ -40,6 +45,7 @@ if noUnderscore.len == 1:
     updatesEndpoint = "goosemod"
 else:
     updatesEndpoint = (block: collect(newSeq): (for i in deduplicate(mapIt(noUnderscore[1], $it)): moduleIds[i])).join("+")
+
 
 let settingsPath = os.joinPath(getChannelPath(selectedChannel), "settings.json")
 if fileExists(settingsPath):
