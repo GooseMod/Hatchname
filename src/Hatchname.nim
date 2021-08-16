@@ -40,7 +40,7 @@ proc quitDiscord(channel: string) =
     var binaryName = "Discord"
 
     if channel != "stable":
-        binaryName = binaryName & ($channel[0]).toUpper() & channel[1..channel.len]
+        binaryName = binaryName & ($channel[0]).toUpper() & channel[1..channel.len-1]
 
     when system.hostOS == "windows":
         discard execShellCmd(fmt"taskkill /f /im {binaryName}.exe")
@@ -52,7 +52,7 @@ proc startDiscord(channel: string) =
     var linuxBootstrap = "discord"
 
     if channel != "stable":
-        binaryName = binaryName & ($channel[0]).toUpper() & channel[1..channel.len]
+        binaryName = binaryName & ($channel[0]).toUpper() & channel[1..channel.len-1]
         linuxBootstrap = linuxBootstrap & fmt"-{channel}"
 
     when system.hostOS == "windows":
