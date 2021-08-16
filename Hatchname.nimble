@@ -1,12 +1,12 @@
 # Package
 
 version       = "1.0.0"
-author        = "creatable"
-description   = "A very minimal GooseMod installer that works via its own filename."
+author        = "GooseNest Team (creatable + Ducko)"
+description   = "GM 1-click installer based on filename."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["Hatchname"]
-
+binDir        = "dist"
 
 # Dependencies
 
