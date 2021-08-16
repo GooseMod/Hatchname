@@ -6,8 +6,8 @@ import tables
 import sugar
 import strformat
 
-const updatesUrl = "https://updates.goosemod.com"
-const modules = {"1": "betterdiscord", "2": "smartcord", "3": "goosemod", "4": "reactdevtools"}.toTable
+const updatesHost = "https://updates.goosemod.com"
+const moduleIds = {"1": "betterdiscord", "2": "smartcord", "3": "goosemod", "4": "reactdevtools"}.toTable
 
 let fileName = os.extractFilename(os.getAppFilename()).split(".exe")[0]
 var baseDirectory: string
@@ -34,16 +34,16 @@ let gmRemoved = fileName.split("GM")[1]
 let noUnderscore = gmRemoved.split("_")
 let selectedChannel = noUnderscore[0].toLower()
 
-var moduleString: string
+var updatesEndpoint: string
 
 if noUnderscore.len == 1:
-    moduleString = modules["3"]
+    updatesEndpoint = "goosemod"
 else:
-    moduleString = (block: collect(newSeq): (for i in deduplicate(mapIt(noUnderscore[1], $it)): modules[i])).join("+")
+    updatesEndpoint = (block: collect(newSeq): (for i in deduplicate(mapIt(noUnderscore[1], $it)): moduleIds[i])).join("+")
 
 let settingsPath = os.joinPath(getChannelPath(selectedChannel), "settings.json")
 if fileExists(settingsPath):
     let settings = parseFile(settingsPath)
-    settings.add("NEW_UPDATE_ENDPOINT", %fmt"{updatesUrl}/{moduleString}/")
-    settings.add("UPDATE_ENDPOINT", %fmt"{updatesUrl}/{moduleString}")
+    settings.add("NEW_UPDATE_ENDPOINT", %fmt"{updatesHost}/{updatesEndpoint}/")
+    settings.add("UPDATE_ENDPOINT", %fmt"{updateshost}/{updatesEndpoint}")
     writeFile(settingsPath, settings.pretty())
