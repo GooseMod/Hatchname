@@ -56,7 +56,8 @@ proc startDiscord(channel: string) =
         linuxBootstrap = linuxBootstrap & fmt"-{channel}"
 
     when system.hostOS == "windows":
-        discard startProcess(fmt("\"%localappdata%\\{binaryName}\\Update.exe\" --processStart {binaryName}.exe"), options = {poStdErrToStdOut, poUsePath, poEvalCommand})
+        let exePath = os.joinPath(os.getEnv("localappdata"), binaryName, "Update.exe")
+        discard startProcess(fmt("\"{exePath}\" --processStart {binaryName}.exe"), options = {poStdErrToStdOut, poUsePath, poEvalCommand})
     else:
         discard startProcess(linuxBootstrap, options = {poStdErrToStdOut, poUsePath, poEvalCommand})
 
@@ -67,9 +68,6 @@ let selectedChannel = noUnderscore[0].toLower()
 
 var updatesEndpoint: string
 
-echo("Exiting Discord...")
-quitDiscord(selectedChannel)
-sleep(3000) # Wait for Discord to finish closing
 
 # todo: Sanity check filename, if not error out
 
@@ -93,6 +91,10 @@ if fileExists(settingsPath):
     writeFile(settingsPath, settings.pretty())
 # else:
     # todo: Error out (no settings.json)
+
+echo("Exiting Discord...")
+quitDiscord(selectedChannel)
+sleep(5000) # Wait for Discord to finish closing
 
 echo("Starting Discord...")
 startDiscord(selectedChannel)
