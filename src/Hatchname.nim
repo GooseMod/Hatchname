@@ -56,7 +56,7 @@ proc startDiscord(channel: string) =
         linuxBootstrap = linuxBootstrap & fmt"-{channel}"
 
     when system.hostOS == "windows":
-        discard startProcess(fmt"'%localappdata%\{binaryName}\Update.exe' --processStart {binaryName}.exe", options = {poStdErrToStdOut, poUsePath, poEvalCommand})
+        discard startProcess(fmt("\"%localappdata%\\{binaryName}\\Update.exe\" --processStart {binaryName}.exe"), options = {poStdErrToStdOut, poUsePath, poEvalCommand})
     else:
         discard startProcess(linuxBootstrap, options = {poStdErrToStdOut, poUsePath, poEvalCommand})
 
